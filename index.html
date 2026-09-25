@@ -1,348 +1,488 @@
-<!-- iOS 웹앱 홈 화면 추가 설정 (웹클립 아이콘 및 풀스크린 모드) -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="KB스타뱅킹">
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KB스타뱅킹</title>
 
-<!-- KB국민은행 고해상도 앱 아이콘 (SVG Data URI) -->
-<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180' width='180' height='180'><rect width='180' height='180' rx='40' fill='%23FFBC00'/><text x='90' y='110' font-family='sans-serif' font-weight='900' font-size='62' fill='%2326282C' text-anchor='middle'>KB</text><circle cx='138' cy='45' r='10' fill='%2326282C'/></svg>">
+    <!-- 아이폰 PWA Fullscreen 설정 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="KB스타뱅킹">
 
-<title>KB스타뱅킹</title>
-<style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Pretendard", "Apple SD Gothic Neo", sans-serif;
-        -webkit-tap-highlight-color: transparent;
-        user-select: none;
+    <!-- 아이폰 홈화면 KB 노란색 아이콘 (SVG Data URL) -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23FFBC00'/><text x='90' y='105' font-family='Arial, sans-serif' font-weight='900' font-size='65' fill='%2326282C' text-anchor='middle'>KB</text><rect x='35' y='125' width='110' height='8' rx='4' fill='%2326282C'/></svg>">
+    <link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23FFBC00'/><text x='90' y='105' font-family='Arial, sans-serif' font-weight='900' font-size='65' fill='%2326282C' text-anchor='middle'>KB</text></svg>">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #F4F5F7;
+            color: #26282C;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 430px;
+            background-color: #F4F5F7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            padding-bottom: 90px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        /* KB Header */
+        .header {
+            background-color: #FFBC00;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header .logo {
+            font-size: 18px;
+            font-weight: 800;
+            color: #26282C;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .header .logo-symbol {
+            background-color: #26282C;
+            color: #FFBC00;
+            font-size: 11px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 900;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 14px;
+            font-size: 18px;
+        }
+
+        .content {
+            padding: 16px;
+        }
+
+        .account-card {
+            background: linear-gradient(135deg, #FFF8E1 0%, #FFFFFF 100%);
+            border: 1px solid #FFE58F;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            margin-bottom: 16px;
+        }
+
+        .account-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+
+        .account-title {
+            font-size: 13px;
+            color: #6A6E77;
+            font-weight: 600;
+        }
+
+        .account-number {
+            font-size: 12px;
+            color: #8C919C;
+            margin-top: 2px;
+        }
+
+        .account-balance {
+            font-size: 26px;
+            font-weight: 700;
+            color: #1A1C1E;
+            margin: 10px 0 16px 0;
+            letter-spacing: -0.5px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 12px 0;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: #FFBC00;
+            color: #26282C;
+        }
+
+        .btn-secondary {
+            background-color: #EFEFEF;
+            color: #50545C;
+        }
+
+        .history-section {
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            padding: 20px 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #F0F1F4;
+        }
+
+        .history-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #26282C;
+        }
+
+        .btn-add {
+            background-color: #26282C;
+            color: #FFFFFF;
+            border: none;
+            padding: 7px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid #F7F8FA;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .item-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #26282C;
+        }
+
+        .item-date {
+            font-size: 11px;
+            color: #8C919C;
+        }
+
+        .item-amount-container {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .amount-in {
+            color: #EB0000;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .amount-out {
+            color: #1162FF;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .after-balance {
+            font-size: 11px;
+            color: #8C919C;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 430px;
+            background-color: #FFFFFF;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 14px 0;
+            border-top: 1px solid #EAECEF;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            color: #8C919C;
+            gap: 4px;
+        }
+
+        .nav-item.active {
+            color: #26282C;
+            font-weight: 700;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .modal-content {
+            background-color: #FFFFFF;
+            width: 100%;
+            max-width: 430px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            padding: 24px 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 16px;
+        }
+
+        .form-field {
+            margin-bottom: 14px;
+        }
+
+        .form-field label {
+            display: block;
+            font-size: 12px;
+            color: #6A6E77;
+            margin-bottom: 6px;
+        }
+
+        .form-field input, .form-field select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #E0E2E7;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .modal-btns {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .modal-btns button {
+            flex: 1;
+            padding: 14px;
+            border-radius: 8px;
+            border: none;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header">
+        <div class="logo">
+            <span class="logo-symbol">KB</span> KB스타뱅킹
+        </div>
+        <div class="header-icons">
+            <span>🔔</span>
+            <span>☰</span>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="account-card">
+            <div class="account-header">
+                <div>
+                    <div class="account-title">KB마이핏통장 <span>＞</span></div>
+                    <div class="account-number">283802-04-192831</div>
+                </div>
+                <span style="font-size: 18px; color: #8C919C;">⋮</span>
+            </div>
+            <div class="account-balance" id="totalBalance">0 원</div>
+            <div class="card-actions">
+                <button class="btn-action btn-primary">이체</button>
+                <button class="btn-action btn-secondary" onclick="openModal()">내역 직접입력</button>
+            </div>
+        </div>
+
+        <div class="history-section">
+            <div class="history-header">
+                <div class="history-title">거래 내역</div>
+                <button class="btn-add" onclick="openModal()">+ 내역 추가</button>
+            </div>
+            <div id="historyList"></div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active"><span style="font-size: 18px;">🏠</span><span>홈</span></div>
+        <div class="nav-item"><span style="font-size: 18px;">💰</span><span>내자산</span></div>
+        <div class="nav-item"><span style="font-size: 18px;">🛒</span><span>상품</span></div>
+        <div class="nav-item"><span style="font-size: 18px;">🎁</span><span>혜택</span></div>
+        <div class="nav-item"><span style="font-size: 18px;">⚙️</span><span>전체메뉴</span></div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-content">
+        <div class="modal-title">입출금 내역 작성</div>
+        <div class="form-field">
+            <label>거래 종류</label>
+            <select id="typeSelect">
+                <option value="in">입금 (+)</option>
+                <option value="out">출금 (-)</option>
+            </select>
+        </div>
+        <div class="form-field">
+            <label>거래 내용</label>
+            <input type="text" id="descInput" placeholder="예: 월급, 용돈, 스타벅스">
+        </div>
+        <div class="form-field">
+            <label>금액 (원)</label>
+            <input type="number" id="amountInput" placeholder="금액 숫자 입력">
+        </div>
+        <div class="form-field">
+            <label>날짜 및 시간</label>
+            <input type="text" id="dateInput" placeholder="예: 09.26 14:30">
+        </div>
+        <div class="modal-btns">
+            <button style="background-color: #EFEFEF; color: #50545C;" onclick="closeModal()">취소</button>
+            <button style="background-color: #FFBC00; color: #26282C;" onclick="addTransaction()">등록하기</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let transactions = JSON.parse(localStorage.getItem('kb_transactions')) || [
+        { id: 1, type: 'in', desc: 'KB국민 급여인상', amount: 3500000, date: '09.25 09:00', balance: 3500000 },
+        { id: 2, type: 'out', desc: '쿠팡 결제', amount: 48500, date: '09.25 18:22', balance: 3451500 }
+    ];
+
+    function updateView() {
+        const historyList = document.getElementById('historyList');
+        historyList.innerHTML = '';
+
+        if (transactions.length === 0) {
+            historyList.innerHTML = '<div style="text-align: center; color: #8C919C; padding: 20px; font-size: 13px;">거래 내역이 없습니다.</div>';
+            document.getElementById('totalBalance').innerText = '0 원';
+            return;
+        }
+
+        document.getElementById('totalBalance').innerText = transactions[0].balance.toLocaleString() + ' 원';
+
+        transactions.forEach(item => {
+            const el = document.createElement('div');
+            el.className = 'history-item';
+            const isIn = item.type === 'in';
+            const amountClass = isIn ? 'amount-in' : 'amount-out';
+            const sign = isIn ? '+' : '-';
+
+            el.innerHTML = `
+                <div class="item-info">
+                    <div class="item-title">${item.desc}</div>
+                    <div class="item-date">${item.date}</div>
+                </div>
+                <div class="item-amount-container">
+                    <div class="${amountClass}">${sign}${item.amount.toLocaleString()} 원</div>
+                    <div class="after-balance">잔액 ${item.balance.toLocaleString()} 원</div>
+                </div>
+            `;
+            historyList.appendChild(el);
+        });
+
+        localStorage.setItem('kb_transactions', JSON.stringify(transactions));
     }
 
-    body {
-        background-color: #F4F5F7;
-        color: #26282C;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
-        min-height: 100vh;
+    function openModal() { document.getElementById('modalOverlay').style.display = 'flex'; }
+    function closeModal() {
+        document.getElementById('modalOverlay').style.display = 'none';
+        document.getElementById('descInput').value = '';
+        document.getElementById('amountInput').value = '';
+        document.getElementById('dateInput').value = '';
     }
 
-    .app-container {
-        width: 100%;
-        max-width: 430px;
-        background-color: #F4F5F7;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        padding-bottom: 90px;
+    function addTransaction() {
+        const type = document.getElementById('typeSelect').value;
+        const desc = document.getElementById('descInput').value.trim();
+        const amount = parseInt(document.getElementById('amountInput').value);
+        let date = document.getElementById('dateInput').value.trim();
+
+        if (!desc || isNaN(amount) || amount <= 0) {
+            alert('내용과 금액을 정확히 입력해주세요.');
+            return;
+        }
+
+        if (!date) {
+            const now = new Date();
+            date = `${String(now.getMonth()+1).padStart(2,'0')}.${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+        }
+
+        const currentBalance = transactions.length > 0 ? transactions[0].balance : 0;
+        const newBalance = type === 'in' ? currentBalance + amount : currentBalance - amount;
+
+        transactions.unshift({
+            id: Date.now(),
+            type: type,
+            desc: desc,
+            amount: amount,
+            date: date,
+            balance: newBalance
+        });
+
+        updateView();
+        closeModal();
     }
 
-    /* iOS Notch Safe Area */
-    .safe-top {
-        height: env(safe-area-inset-top, 20px);
-        background-color: #FFBC00;
-    }
+    updateView();
+</script>
 
-    /* KB Header */
-    .header {
-        background-color: #FFBC00;
-        padding: 12px 18px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-    }
-
-    .header .logo {
-        font-size: 19px;
-        font-weight: 800;
-        color: #26282C;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        letter-spacing: -0.5px;
-    }
-
-    .header .logo-symbol {
-        background-color: #26282C;
-        color: #FFBC00;
-        font-size: 11px;
-        padding: 2px 6px;
-        border-radius: 4px;
-        font-weight: 900;
-    }
-
-    .header-icons {
-        display: flex;
-        gap: 16px;
-        font-size: 18px;
-    }
-
-    /* Content Area */
-    .content {
-        padding: 16px;
-    }
-
-    /* Account Card */
-    .account-card {
-        background: linear-gradient(135deg, #FFF8E1 0%, #FFFFFF 100%);
-        border: 1px solid #FFE58F;
-        border-radius: 20px;
-        padding: 22px 20px;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.04);
-        margin-bottom: 16px;
-    }
-
-    .account-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin-bottom: 12px;
-    }
-
-    .account-title {
-        font-size: 14px;
-        color: #50545C;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    .account-number {
-        font-size: 12px;
-        color: #8C919C;
-        margin-top: 3px;
-    }
-
-    .account-balance {
-        font-size: 28px;
-        font-weight: 800;
-        color: #1A1C1E;
-        margin: 12px 0 18px 0;
-        letter-spacing: -0.5px;
-    }
-
-    .card-actions {
-        display: flex;
-        gap: 10px;
-    }
-
-    .btn-action {
-        flex: 1;
-        padding: 12px 0;
-        border-radius: 10px;
-        font-size: 14px;
-        font-weight: 700;
-        border: none;
-        cursor: pointer;
-        text-align: center;
-    }
-
-    .btn-primary {
-        background-color: #FFBC00;
-        color: #26282C;
-    }
-
-    .btn-secondary {
-        background-color: #EFEFEF;
-        color: #40444C;
-    }
-
-    /* History Section */
-    .history-section {
-        background-color: #FFFFFF;
-        border-radius: 20px;
-        padding: 20px 18px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-    }
-
-    .history-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 16px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid #F0F1F4;
-    }
-
-    .history-title {
-        font-size: 16px;
-        font-weight: 700;
-        color: #26282C;
-    }
-
-    .btn-add {
-        background-color: #26282C;
-        color: #FFFFFF;
-        border: none;
-        padding: 7px 14px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 700;
-        cursor: pointer;
-    }
-
-    .history-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 14px 0;
-        border-bottom: 1px solid #F7F8FA;
-    }
-
-    .history-item:last-child {
-        border-bottom: none;
-    }
-
-    .item-info {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-    }
-
-    .item-title {
-        font-size: 15px;
-        font-weight: 600;
-        color: #26282C;
-    }
-
-    .item-date {
-        font-size: 12px;
-        color: #8C919C;
-    }
-
-    .item-amount-container {
-        text-align: right;
-        display: flex;
-        flex-direction: column;
-        gap: 3px;
-    }
-
-    .amount-in {
-        color: #EB0000;
-        font-weight: 700;
-        font-size: 16px;
-    }
-
-    .amount-out {
-        color: #1162FF;
-        font-weight: 700;
-        font-size: 16px;
-    }
-
-    .after-balance {
-        font-size: 11px;
-        color: #8C919C;
-    }
-
-    /* Bottom Tab Bar */
-    .bottom-nav {
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        max-width: 430px;
-        background-color: #FFFFFF;
-        display: flex;
-        justify-content: space-around;
-        padding: 10px 0 calc(10px + env(safe-area-inset-bottom, 10px)) 0;
-        border-top: 1px solid #EAECEF;
-        z-index: 100;
-    }
-
-    .nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        font-size: 10px;
-        color: #8C919C;
-        gap: 4px;
-        cursor: pointer;
-    }
-
-    .nav-item.active {
-        color: #26282C;
-        font-weight: 700;
-    }
-
-    /* Modal Overlay */
-    .modal-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0,0,0,0.5);
-        z-index: 1000;
-        justify-content: center;
-        align-items: flex-end;
-    }
-
-    .modal-content {
-        background-color: #FFFFFF;
-        width: 100%;
-        max-width: 430px;
-        border-top-left-radius: 24px;
-        border-top-right-radius: 24px;
-        padding: 24px 20px calc(24px + env(safe-area-inset-bottom, 0px)) 20px;
-        animation: slideUp 0.25s ease-out;
-    }
-
-    @keyframes slideUp {
-        from { transform: translateY(100%); }
-        to { transform: translateY(0); }
-    }
-
-    .modal-title {
-        font-size: 18px;
-        font-weight: 700;
-        margin-bottom: 20px;
-    }
-
-    .form-field {
-        margin-bottom: 16px;
-    }
-
-    .form-field label {
-        display: block;
-        font-size: 12px;
-        color: #6A6E77;
-        margin-bottom: 6px;
-        font-weight: 600;
-    }
-
-    .form-field input, .form-field select {
-        width: 100%;
-        padding: 14px;
-        border: 1px solid #E0E2E7;
-        border-radius: 10px;
-        font-size: 15px;
-        outline: none;
-        -webkit-appearance: none;
-        background-color: #FAFAFB;
-    }
-
-    .form-field input:focus {
-        border-color: #FFBC00;
-        background-color: #FFFFFF;
-    }
-
-    .modal-btns {
-        display: flex;
-        gap: 10px;
-        margin-top: 24px;
-    }
-
-    .modal-btns button {
-        flex: 1;
-        padding: 15px;
-        border-radius: 10px;
-        border: none;
-        font-weight: 700;
-        font-size: 15px;
-        cursor: pointer;
-    }
-</style>
+</body>
+</html>

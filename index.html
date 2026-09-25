@@ -1,17 +1,17 @@
-<!-- iOS 홈 화면 앱 설정 -->
+<!-- iOS 홈 화면 웹앱 설정 -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="KB스타뱅킹">
 
-<!-- KB 국민은행 옐로우 시그니처 앱 아이콘 (Data URI SVG) -->
-<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180' width='180' height='180'><rect width='180' height='180' rx='42' fill='%23FFD000'/><g transform='translate(40, 28) scale(0.68)' fill='%2326282C'><path d='M70,10 C72,30 65,60 20,80 C15,82 18,88 24,86 C60,75 75,55 82,30 C88,55 103,75 139,86 C145,88 148,82 143,80 C98,60 91,30 93,10 C93,5 70,5 70,10 Z'/><path d='M81,70 C70,100 40,120 10,130 C5,132 8,138 14,136 C40,128 65,112 81,90 C97,112 122,128 148,136 C154,138 157,132 152,130 C122,120 92,100 81,70 Z'/></g><text x='90' y='148' font-family='Apple SD Gothic Neo, Malgun Gothic, sans-serif' font-weight='800' font-size='22' fill='%2326282C' text-anchor='middle' letter-spacing='-0.5'>KB국민은행</text></svg>">
+<!-- KB국민은행 실제 시그니처 앱 아이콘 (검은색 바탕 + 노란 스타/K 로고 + KB국민은행) -->
+<link rel="apple-touch-icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180' width='180' height='180'><rect width='180' height='180' rx='40' fill='%23282828'/><g transform='translate(42, 30) scale(0.65)' fill='%23FFBC00'><path d='M70,10 C72,30 65,60 20,80 C15,82 18,88 24,86 C60,75 75,55 82,30 C88,55 103,75 139,86 C145,88 148,82 143,80 C98,60 91,30 93,10 C93,5 70,5 70,10 Z'/><path d='M81,70 C70,100 40,120 10,130 C5,132 8,138 14,136 C40,128 65,112 81,90 C97,112 122,128 148,136 C154,138 157,132 152,130 C122,120 92,100 81,70 Z'/></g><text x='90' y='146' font-family='Apple SD Gothic Neo, sans-serif' font-weight='800' font-size='22' fill='%23FFBC00' text-anchor='middle' letter-spacing='-0.5'>KB국민은행</text></svg>">
 
 <style>
     * {
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Apple SD Gothic Neo", "Pretendard", sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Pretendard", "Noto Sans KR", sans-serif;
         -webkit-tap-highlight-color: transparent;
         user-select: none;
     }
@@ -35,15 +35,16 @@
         position: relative;
         box-shadow: 0 0 20px rgba(0,0,0,0.08);
         overflow-x: hidden;
+        padding-bottom: env(safe-area-inset-bottom, 20px);
     }
 
-    /* Top Safe Area Offset */
-    .ios-notch {
-        height: env(safe-area-inset-top, 20px);
+    /* Safe Top Padding for Notch */
+    .safe-top {
+        height: env(safe-area-inset-top, 44px);
         background-color: #F4F5F7;
     }
 
-    /* Page View Controls */
+    /* Page Layout Control */
     .page {
         display: none;
         flex-direction: column;
@@ -56,7 +57,7 @@
         display: flex;
     }
 
-    /* HEADER - HOME */
+    /* HOME HEADER */
     .home-header {
         padding: 12px 20px;
         display: flex;
@@ -73,9 +74,9 @@
 
     .toggle-btn {
         background: #FFBC00;
-        padding: 3px 8px;
-        border-radius: 12px;
-        font-size: 11px;
+        padding: 4px 10px;
+        border-radius: 14px;
+        font-size: 12px;
         font-weight: 800;
         color: #26282C;
         display: flex;
@@ -84,8 +85,8 @@
     }
 
     .toggle-circle {
-        width: 14px;
-        height: 14px;
+        width: 12px;
+        height: 12px;
         background: #FFF;
         border-radius: 50%;
     }
@@ -98,7 +99,7 @@
         color: #50545C;
     }
 
-    /* HEADER - SUB PAGES */
+    /* SUB HEADER */
     .sub-header {
         padding: 14px 18px;
         display: flex;
@@ -106,6 +107,9 @@
         align-items: center;
         background-color: #FFFFFF;
         border-bottom: 1px solid #F0F1F4;
+        position: sticky;
+        top: 0;
+        z-index: 50;
     }
 
     .sub-header-title {
@@ -122,7 +126,7 @@
         border: none;
     }
 
-    /* CARD - KB STAR BANKING HOME */
+    /* MAIN ACCOUNT CARD */
     .main-card {
         background: #FFFFFF;
         border-radius: 20px;
@@ -166,6 +170,7 @@
         display: flex;
         align-items: center;
         gap: 4px;
+        cursor: pointer;
     }
 
     .acc-balance-row {
@@ -221,10 +226,9 @@
         cursor: pointer;
     }
 
-    /* QUICK MEMO / RECENT RECIPIENTS */
     .quick-recipients {
         display: flex;
-        gap: 12px;
+        gap: 10px;
         margin-top: 16px;
         padding-top: 14px;
         border-top: 1px solid #F4F5F7;
@@ -239,7 +243,7 @@
         color: #50545C;
         font-weight: 600;
         background: #F8F9FA;
-        padding: 6px 10px;
+        padding: 6px 12px;
         border-radius: 16px;
         white-space: nowrap;
     }
@@ -265,6 +269,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        cursor: pointer;
     }
 
     .banner-text {
@@ -279,7 +284,7 @@
         margin-top: 2px;
     }
 
-    /* HISTORY LIST PAGE STYLING */
+    /* HISTORY PAGE STYLING */
     .history-page-bg {
         background-color: #FFFFFF;
         flex: 1;
@@ -538,7 +543,7 @@
         font-weight: 700;
     }
 
-    /* FLOATING ACTION BUTTON FOR CUSTOM TRANSACTIONS */
+    /* FAB EDIT BUTTON */
     .fab-add {
         position: fixed;
         bottom: 80px;
@@ -602,7 +607,7 @@
 </style>
 
 
-<!-- ==================== 1. MAIN HOME PAGE ==================== -->
+<!-- 1. HOME PAGE -->
 <div id="pageHome" class="page active">
     <div class="home-header">
         <div class="left">
@@ -616,7 +621,6 @@
         </div>
     </div>
 
-    <!-- Main Account Card -->
     <div class="main-card">
         <div class="card-top">
             <div>
@@ -642,7 +646,7 @@
 
         <div class="quick-recipients">
             <div class="recipient-item"><span class="avatar-b">B</span> 고태호</div>
-            <div class="recipient-item"><span class="avatar-b" style="background:#2CCB71;">견</span> 견소정</div>
+            <div class="recipient-item"><span class="avatar-b" style="background:#2CCB71; color:#FFF;">견</span> 견소정</div>
             <div class="recipient-item"><span class="avatar-b">B</span> 유정석</div>
             <div class="recipient-item"><span class="avatar-b">B</span> 박선용</div>
         </div>
@@ -660,14 +664,13 @@
         <span style="color:#C4C7C8;">＞</span>
     </div>
 
-    <div class="banner-card">
+    <div class="banner-card" onclick="showHistoryPage()">
         <div>
-            <div class="banner-text" onclick="showHistoryPage()">통합거래내역</div>
+            <div class="banner-text">통합거래내역</div>
         </div>
         <span style="color:#C4C7C8;">＞</span>
     </div>
 
-    <!-- Bottom Navigation -->
     <div class="bottom-nav">
         <div class="nav-item active"><span style="font-size:18px;">🏦</span><span>전체계좌</span></div>
         <div class="nav-item"><span style="font-size:18px;">🛍️</span><span>금융상품</span></div>
@@ -677,7 +680,7 @@
     </div>
 </div>
 
-<!-- ==================== 2. TRANSACTION HISTORY PAGE ==================== -->
+<!-- 2. TRANSACTION HISTORY PAGE -->
 <div id="pageHistory" class="page">
     <div class="sub-header">
         <button class="icon-btn" onclick="showHomePage()">＜</button>
@@ -720,12 +723,11 @@
             <span>∧</span>
         </div>
 
-        <!-- Dynamic Transaction History Items -->
         <div id="txListContainer"></div>
     </div>
 </div>
 
-<!-- ==================== 3. TRANSACTION DETAIL PAGE ==================== -->
+<!-- 3. TRANSACTION DETAIL PAGE -->
 <div id="pageDetail" class="page">
     <div class="sub-header">
         <div></div>
@@ -776,13 +778,13 @@
     </div>
 </div>
 
-<!-- Floating Action Button for Adding Data -->
+<!-- Custom Data Input FAB -->
 <div class="fab-add" onclick="openAddModal()">+</div>
 
-<!-- Modal for Adding Data -->
+<!-- Add Transaction Modal -->
 <div class="modal-overlay" id="addModal">
     <div class="modal-body">
-        <h3 style="margin-bottom:14px; font-size:16px;">내역 직접 입력</h3>
+        <h3 style="margin-bottom:14px; font-size:16px;">거래내역 직접 입력</h3>
         <div class="modal-field">
             <label>구분</label>
             <select id="inputKind">
@@ -792,7 +794,7 @@
         </div>
         <div class="modal-field">
             <label>거래명 (이름/적요)</label>
-            <input type="text" id="inputName" placeholder="예: 고태호, 급여">
+            <input type="text" id="inputName" placeholder="예: 고태호, 월급">
         </div>
         <div class="modal-field">
             <label>금액 (원)</label>
